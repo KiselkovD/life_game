@@ -1,9 +1,9 @@
 # life_game
 
-<img src="https://github.com/KiselkovD/life_game/tree/main/life_game/Resourse/1.png" alt="menu" height="350"/>
-<img src="https://github.com/KiselkovD/life_game/tree/main/life_game/Resourse/2.png" alt="menu" height="350"/>
-<img src="https://github.com/KiselkovD/life_game/tree/main/life_game/Resourse/3.png" alt="menu" height="350"/>
-<img src="https://github.com/KiselkovD/life_game/tree/main/life_game/Resourse/4.png" alt="menu" height="350"/>
+<img src="https://github.com/KiselkovD/life_game/blob/main/life_game/Resourse/1.png" alt="menu" height="350"/>
+<img src="https://github.com/KiselkovD/life_game/blob/main/life_game/Resourse/2.png" alt="rule" height="350"/>
+<img src="https://github.com/KiselkovD/life_game/blob/main/life_game/Resourse/3.png" alt="save" height="350"/>
+<img src="https://github.com/KiselkovD/life_game/blob/main/life_game/Resourse/4.png" alt="game" height="350"/>
 
 ## About
 
