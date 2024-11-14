@@ -23,7 +23,7 @@ namespace coursework_wpf
     /// </summary>
     public partial class MainWindow : Window
     {
-        public string[] color_ = new string[6] { "#FFDC143C", "#FF560074","#FFADD8E6","#FF008000","#FFA52A2A","#FF36393F" };
+        public string[] CellColors = new string[6] { "#FFDC143C", "#FF560074","#FFADD8E6","#FF008000","#FFA52A2A","#FF36393F" };
         public int[] array = new int[1] { 1 };
         public int cell_type = 0;
         public int input_type = 0;
@@ -61,34 +61,10 @@ namespace coursework_wpf
                     ((Button)save.Children[dd]).Click += Button_saves_Click;
                 }
             }
-            //((Button)gameField.Children[20]).Content = ((Button)gameField.Children[20]).FontSize;
-
-            //net.Cells[2].activate(2, ref net.Cells);
+           
             Console.WriteLine() ;
             InitializeTimer();
 
-            //////////////////////////
-
-            //while (fl_pause==false)
-
-
-            //////////////////////////
-            /*
-             todo
-            дописать функции классов
-            
-            организовать сохранение загрузку
-            организовать смену страниц
-            организовать переменные для хранения параметров введенных пользователем
-            /наверное просто делать обнуление цвета всей таблицы при нажатии
-            замена новая игра/продолжить
-            основной цикл:
-                #считываем действия игрока
-                #поле с расклассоваными клеками
-                #проходимся по полю вызывая его обитателей
-                #проходимся по полю заполняя клетки
-            /наверно сделать защитную пластину против нажатий не помешает
-             */
         }
         private void InitializeTimer()
         {
@@ -100,14 +76,14 @@ namespace coursework_wpf
             gameloop.Tick += MainGameLoop;
             gameloop.Start();
         }
-        private void MainGameLoop(object sender, EventArgs e)////////////////////////////////////////////*******************************************
+        private void MainGameLoop(object sender, EventArgs e)
         {
             if(speed != 0)
             {
                  for (int ii = 0; ii < Const.MAX_GRID * Const.MAX_GRID; ii++) net.Cells[ii].activate(ii, ref net.Cells);
                  for (int ii = 0; ii < Const.MAX_GRID * Const.MAX_GRID; ii++) net.Cells[ii].spawn(ii, ref net.Cells);
             }
-            for (int ii = 0; ii < Const.MAX_GRID * Const.MAX_GRID; ii++) ((Button)gameField.Children[ii]).Background = (Brush)converter.ConvertFromString(color_[net.Cells[ii].who()]);
+            for (int ii = 0; ii < Const.MAX_GRID * Const.MAX_GRID; ii++) ((Button)gameField.Children[ii]).Background = (Brush)converter.ConvertFromString(CellColors[net.Cells[ii].GetCellType()]);
 
         }
         //coursework_wpf.MainWindow
@@ -118,7 +94,7 @@ namespace coursework_wpf
             {
                 for (int lol = 0; lol < 144; lol++)
                 {
-                    switch (Convert.ToInt32(sr.ReadLine()))//убийцы0 обычные1 социальные2 живучие3 еда4
+                    switch (Convert.ToInt32(sr.ReadLine()))
                     {
                         case 0:
                             net_buf.Cells[lol] = new killer();
@@ -142,7 +118,7 @@ namespace coursework_wpf
                 }
 
             }//читаем во 2ю
-            for (int ii = 0; ii < Const.MAX_GRID * Const.MAX_GRID; ii++) ((Button)saveField.Children[ii]).Background = (Brush)converter.ConvertFromString(color_[net_buf.Cells[ii].who()]);
+            for (int ii = 0; ii < Const.MAX_GRID * Const.MAX_GRID; ii++) ((Button)saveField.Children[ii]).Background = (Brush)converter.ConvertFromString(CellColors[net_buf.Cells[ii].GetCellType()]);
             sav_buf = Convert.ToInt32(((Button)e.OriginalSource).Content);
             //рисуем
         }
@@ -152,7 +128,7 @@ namespace coursework_wpf
             {
                 for (int lol = 0; lol < 144; lol++)
                 {
-                    sr.WriteLine(net.Cells[lol].who());
+                    sr.WriteLine(net.Cells[lol].GetCellType());
 
                 }
             }
@@ -165,7 +141,7 @@ namespace coursework_wpf
             {
                 for (int lol = 0; lol < 144; lol++)
                 {
-                    switch (Convert.ToInt32(sr.ReadLine()))//убийцы0 обычные1 социальные2 живучие3 еда4
+                    switch (Convert.ToInt32(sr.ReadLine()))
                     {
                         case 0:
                             net_buf.Cells[lol] = new killer();
@@ -190,7 +166,7 @@ namespace coursework_wpf
 
             }
             //читаем во 2ю
-            for (int ii = 0; ii < Const.MAX_GRID * Const.MAX_GRID; ii++) ((Button)loadField.Children[ii]).Background = (Brush)converter.ConvertFromString(color_[net_buf.Cells[ii].who()]);
+            for (int ii = 0; ii < Const.MAX_GRID * Const.MAX_GRID; ii++) ((Button)loadField.Children[ii]).Background = (Brush)converter.ConvertFromString(CellColors[net_buf.Cells[ii].GetCellType()]);
 
             //рисуем
             lod_buf = Convert.ToInt32(((Button)e.OriginalSource).Content);
@@ -199,7 +175,7 @@ namespace coursework_wpf
         {
             for (int lol = 0; lol < 144; lol++)
             {
-                switch (net_buf.Cells[lol].who())//убийцы0 обычные1 социальные2 живучие3 еда4
+                switch (net_buf.Cells[lol].GetCellType())
                 {
                     case 0:
                         net.Cells[lol] = new killer();
@@ -228,7 +204,7 @@ namespace coursework_wpf
             switch (input_type)
             {
                 case 0:
-                    switch (cell_type)//убийцы0 обычные1 социальные2 живучие3 еда4
+                    switch (cell_type)
                     {
                         case 0:
                             ((Button)e.OriginalSource).Background = (Brush)converter.ConvertFromString("#FFDC143C");
@@ -289,21 +265,12 @@ namespace coursework_wpf
                              yymi = yy;
                              yyma = yy2;
                         }
-                        /*using (StreamWriter sw = new StreamWriter(File.Open("log.txt", FileMode.Open)))
-                        {
-                            sw.WriteLine(xxmi.ToString());
-                            sw.WriteLine(xxma.ToString());
-                            sw.WriteLine(yymi.ToString());
-                            sw.WriteLine(yyma.ToString());
-                            sw.WriteLine("  ");
-                            //buff.ToString() = sr.ReadLine();
-                        }*/
+                        
                         for (int xg = xxmi; xg < xxma+1; xg++)
                         {
                             for (int yg = yymi; yg < yyma+1; yg++)
                             {
-                                //((Button)gameField.Children[xg+yg* Const.MAX_GRID]).Background = (Brush)converter.ConvertFromString(color_[cell_type]);
-                                switch (cell_type)//убийцы0 обычные1 социальные2 живучие3 еда4
+                                 switch (cell_type)
                                 {
                                     case 0:
                                         net.Cells[xg + yg * Const.MAX_GRID] = new killer();
@@ -333,8 +300,7 @@ namespace coursework_wpf
                 case 2:
                     Console.WriteLine(" s = 2"); // Выполнится, если s равно 2
                     break;
-                    //((Button)e.OriginalSource).Background = (Brush)converter.ConvertFromString("#FF560074");
-                    //yyyyy.Content = ((Button)e.OriginalSource).Grid.Row
+                   
             }
         }
         private void TextBox_KeyDown(object sender, KeyEventArgs e)
@@ -354,9 +320,7 @@ namespace coursework_wpf
         private void mouse_Click(object sender, MouseEventArgs e)
         {
 
-            //string x = (string)((Button)e.OriginalSource).Content;//получить содержимое   
-            //Tabl.Children[0].
-
+            
 
             Rectangle el = new Rectangle();
             el.Width = 50;
@@ -365,16 +329,12 @@ namespace coursework_wpf
             el.Fill = Brushes.Green;
             el.Stroke = Brushes.Red;
             el.StrokeThickness = 3;
-            //for_game.Children.Add(el);
-
-           // = "X=" + e.GetPosition(null).X + " Y=" + e.GetPosition(null).Y;
-
+           
             ((Button)e.OriginalSource).Background = (Brush)converter.ConvertFromString("#FF560074");
             Background = (Brush)converter.ConvertFromString("#FF560074");
         }
 
 
-        //public Class1 dd;убийцы0 обычные1 социальные2 живучие3 еда4
         private void Button_u(object sender, RoutedEventArgs e)
         {
             cell_type = 1;
@@ -475,13 +435,7 @@ namespace coursework_wpf
             Application.Current.Shutdown();
         }
 
-        //private void TextBox_KeyDown(object sender, KeyEventArgs e)
-        //{
-            /*if (e.Key == Key.Escape) //OemQuotes
-                Application.Current.Shutdown(); // добавляем кавычки
-            else
-                menu.Content += e.Key.ToString();*/
-        //}
+       
         
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
@@ -492,83 +446,3 @@ namespace coursework_wpf
         }
     }
 }
-
-/*
- private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            ((MainWindow)Application.Current.MainWindow).array[0] = 0;
-            //((MainWindow)Application.Current.MainWindow).menu.Content = "Some text";
-            MainWindow mainWindow = new MainWindow();
-            mainWindow.Show();
-            Hide();
-        }
-
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-            int d = ((MainWindow)Application.Current.MainWindow).array[0];
-
-            MessageBox.Show(d.ToString());
-        }
- */
-
-
-/*
- foreach (UIElement el in Tabl.Children)
-            {
-                if (el is Button)
-                {
-                    ((Button)el).Click += Button_Click;
-                }
-            }
-        }
-        //coursework_wpf.MainWindow
-        BrushConverter converter = new System.Windows.Media.BrushConverter();
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-
-            //string x = (string)((Button)e.OriginalSource).Content;//получить содержимое   
-            //Tabl.Children[0].
-
-            ((Button)e.OriginalSource).Background = (Brush)converter.ConvertFromString("#FF560074");
-        }
- */
-
-
-
-/*
- void LayoutRoot_MouseMove(object sender, MouseEventArgs e)
-        {
-            // = "X=" + e.GetPosition(null).X + " Y=" + e.GetPosition(null).Y;
-        }
- */
-
-
-/*
- <Window.Resources><Style <Setter<Setter.Value><ControlTemplate <ControlTemplate.Triggers> <Trigger<Setter
-        <ImageBrush x:Key="google_icon" ImageSource="C:\Users\denis\source\repos\coursework_wpf\Assets/g.png" Stretch="None"/>
-        <Style x:Key="googleStyle" TargetType="{x:Type Button}">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type Button}">
-                        <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
-                            <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-
-                            <Trigger Property="IsMouseOver" Value="true">
-                                <Setter Property="Background" TargetName="border" Value="{StaticResource google_icon}"/>
-                            </Trigger>
-                            <Trigger Property="IsPressed" Value="true">
-                                <Setter Property="Background" TargetName="border" Value="{StaticResource google_icon}"/>
-                            </Trigger>
-                            <Trigger Property="IsEnabled" Value="false">
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-    </Window.Resources>
-    
-        <Button Height="150" Width="150" BorderThickness="0" Style="{DynamicResource googleStyle}"></Button>
- */

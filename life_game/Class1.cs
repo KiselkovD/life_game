@@ -15,13 +15,11 @@ namespace coursework_wpf
 
     public class Cell  // клетка
     {
-        public BitArray New = new BitArray(5);  //убийцы0 обычные1 социальные2 живучие3 еда4 
-        //public byte now = 0;                    //сейчас в клетке
-        //public byte new_classic = 0;            //сколько вокруг обычных
+        public BitArray CellStateFlags = new BitArray(5); 
 
         public override string ToString()
         {
-            return $"{New} {who()}";
+            return $"{CellStateFlags} {GetCellType()}";
         }
 
         public virtual void activate(int pos, ref Cell[] arr)
@@ -39,7 +37,7 @@ namespace coursework_wpf
                 {
                     for (int t2 = iy; t2 < iy2 + 1; t2++)
                     {
-                        if (arr[t1 + t2 * Const.MAX_GRID].who() == 1) howmany++;
+                        if (arr[t1 + t2 * Const.MAX_GRID].GetCellType() == 1) howmany++;
                     }
                 }
                 if (howmany == 3) arr[pos] = new usual();
@@ -47,16 +45,16 @@ namespace coursework_wpf
         }
         public virtual void spawn(int pos, ref Cell[] arr)
         {
-            if (arr[pos].New[0]) arr[pos] = new killer(); //убийцы0 обычные1 социальные2 живучие3 еда4 
+            if (arr[pos].CellStateFlags[0]) arr[pos] = new killer();  
             else
             {
-                if (arr[pos].New[1]) arr[pos] = new usual();
+                if (arr[pos].CellStateFlags[1]) arr[pos] = new usual();
                 else
                 {
-                    if (arr[pos].New[2]) arr[pos] = new social();
+                    if (arr[pos].CellStateFlags[2]) arr[pos] = new social();
                     else
                     {
-                        if (arr[pos].New[3]) arr[pos] = new helther();
+                        if (arr[pos].CellStateFlags[3]) arr[pos] = new helther();
                         else
                         {
 
@@ -64,16 +62,16 @@ namespace coursework_wpf
                     }
                 }
             }
-            arr[pos].New = new BitArray(5);
-            for (int bi = 0; bi < 5; bi++) New[bi] = false;
+            arr[pos].CellStateFlags = new BitArray(5);
+            for (int bi = 0; bi < 5; bi++) CellStateFlags[bi] = false;
         }
-        public virtual int who ()
+        public virtual int GetCellType ()
         { return 5; }
 
         
     }
 
-    public class killer : Cell // клетка //убийцы0 обычные1 социальные2 живучие3 еда4 
+    public class killer : Cell // клетка  
     {
         public override void activate(int pos, ref Cell[] arr)
         {
@@ -89,7 +87,7 @@ namespace coursework_wpf
             {
                 for (int t2 = iy; t2 < iy2 + 1; t2++)
                 {
-                    if (arr[t1 + t2 * Const.MAX_GRID].who() != 5 && arr[t1 + t2 * Const.MAX_GRID].who() != 0) fl_d = true;
+                    if (arr[t1 + t2 * Const.MAX_GRID].GetCellType() != 5 && arr[t1 + t2 * Const.MAX_GRID].GetCellType() != 0) fl_d = true;
                 }
             }
             if (fl_d)
@@ -103,7 +101,7 @@ namespace coursework_wpf
                 {
                     for (int t2 = iy; t2 < iy2 + 1; t2++)
                     {
-                        arr[t1 + t2 * Const.MAX_GRID].New[0] = true;
+                        arr[t1 + t2 * Const.MAX_GRID].CellStateFlags[0] = true;
                     }
                 }
             }
@@ -120,14 +118,14 @@ namespace coursework_wpf
 
         public override void spawn(int pos, ref Cell[] arr)
         {
-            arr[pos].New = new BitArray(5);
-            for (int bi = 0; bi < 5; bi++) New[bi] = false;
+            arr[pos].CellStateFlags = new BitArray(5);
+            for (int bi = 0; bi < 5; bi++) CellStateFlags[bi] = false;
         }
 
-        public override int who()
+        public override int GetCellType()
         { return 0; }
     }
-    public class usual : Cell // клетка//убийцы0 обычные1 социальные2 живучие3 еда4 
+    public class usual : Cell // клетка 
     {
         public override void activate(int pos, ref Cell[] arr)
         {
@@ -143,7 +141,7 @@ namespace coursework_wpf
             {
                 for (int t2 = iy; t2 < iy2 + 1; t2++)
                 {
-                    if (arr[t1 + t2 * Const.MAX_GRID].who() == 1) howmany++;
+                    if (arr[t1 + t2 * Const.MAX_GRID].GetCellType() == 1) howmany++;
                 }
             }
             if (!(howmany == 2 || howmany == 3)) arr[pos] = new Cell();
@@ -154,13 +152,13 @@ namespace coursework_wpf
         }
         public override void spawn(int pos, ref Cell[] arr)
         {
-            arr[pos].New = new BitArray(5);
-            for (int bi = 0; bi < 5; bi++) New[bi] = false;
+            arr[pos].CellStateFlags = new BitArray(5);
+            for (int bi = 0; bi < 5; bi++) CellStateFlags[bi] = false;
         }
-        public override int who()
+        public override int GetCellType()
         { return 1; }
     }
-    public class social : Cell // клетка//убийцы0 обычные1 социальные2 живучие3 еда4 
+    public class social : Cell // клетка 
     {
         public override void activate(int pos, ref Cell[] arr)
         {
@@ -176,7 +174,7 @@ namespace coursework_wpf
             {
                 for (int t2 = iy; t2 < iy2 + 1; t2++)
                 {
-                    if (arr[t1 + t2 * Const.MAX_GRID].who() != 5 && arr[t1 + t2 * Const.MAX_GRID].who() != 0 && arr[t1 + t2 * Const.MAX_GRID].who() != 4) fl_d = true;
+                    if (arr[t1 + t2 * Const.MAX_GRID].GetCellType() != 5 && arr[t1 + t2 * Const.MAX_GRID].GetCellType() != 0 && arr[t1 + t2 * Const.MAX_GRID].GetCellType() != 4) fl_d = true;
                 }
             }
             ix = xx - 1; ix2 = xx + 1; iy = yy - 1; iy2 = yy + 1;
@@ -189,7 +187,7 @@ namespace coursework_wpf
             {
                 for (int t2 = iy; t2 < iy2 + 1; t2++)
                 {
-                    if (arr[t1 + t2 * Const.MAX_GRID].who() == 5 || arr[t1 + t2 * Const.MAX_GRID].who() == 4 ) fl_d2++;
+                    if (arr[t1 + t2 * Const.MAX_GRID].GetCellType() == 5 || arr[t1 + t2 * Const.MAX_GRID].GetCellType() == 4 ) fl_d2++;
                 }
             }
             if (fl_d && (fl_d2>2))
@@ -203,7 +201,7 @@ namespace coursework_wpf
                 {
                     for (int t2 = iy; t2 < iy2 + 1; t2++)
                     {
-                        arr[t1 + t2 * Const.MAX_GRID].New[2] = true;
+                        arr[t1 + t2 * Const.MAX_GRID].CellStateFlags[2] = true;
                     }
                 }
 
@@ -219,13 +217,13 @@ namespace coursework_wpf
         public override void spawn(int pos, ref Cell[] arr)
         {
             
-            arr[pos].New = new BitArray(5);
-            for (int bi = 0; bi < 5; bi++) New[bi] = false;
+            arr[pos].CellStateFlags = new BitArray(5);
+            for (int bi = 0; bi < 5; bi++) CellStateFlags[bi] = false;
         }
-        public override int who()
+        public override int GetCellType()
         { return 2; }
     }
-    public class helther : Cell // клетка//убийцы0 обычные1 социальные2 живучие3 еда4 
+    public class helther : Cell // клетка 
     {
         public override void activate(int pos, ref Cell[] arr)
         {
@@ -238,28 +236,28 @@ namespace coursework_wpf
         }
         public override void spawn(int pos, ref Cell[] arr)
         {
-            arr[pos].New = new BitArray(5);
-            for (int bi = 0; bi < 5; bi++) New[bi] = false;
+            arr[pos].CellStateFlags = new BitArray(5);
+            for (int bi = 0; bi < 5; bi++) CellStateFlags[bi] = false;
         }
-        public override int who()
+        public override int GetCellType()
         { return 3; }
     }
-    public class food : Cell // клетка//убийцы0 обычные1 социальные2 живучие3 еда4 
+    public class food : Cell // клетка 
     {
         public override void activate(int pos, ref Cell[] arr)
         {    }
         public override void spawn(int pos, ref Cell[] arr)
         {
-            if (arr[pos].New[0]) arr[pos] = new killer(); //убийцы0 обычные1 социальные2 живучие3 еда4 
+            if (arr[pos].CellStateFlags[0]) arr[pos] = new killer();  
             else
             {
-                if (arr[pos].New[1]) arr[pos] = new usual();
+                if (arr[pos].CellStateFlags[1]) arr[pos] = new usual();
                 else
                 {
-                    if (arr[pos].New[2]) arr[pos] = new social();
+                    if (arr[pos].CellStateFlags[2]) arr[pos] = new social();
                     else
                     {
-                        if (arr[pos].New[3]) arr[pos] = new helther();
+                        if (arr[pos].CellStateFlags[3]) arr[pos] = new helther();
                         else
                         {
 
@@ -267,10 +265,10 @@ namespace coursework_wpf
                     }
                 }
             }
-            arr[pos].New = new BitArray(5);
-            for (int bi = 0; bi < 5; bi++) New[bi] = false;
+            arr[pos].CellStateFlags = new BitArray(5);
+            for (int bi = 0; bi < 5; bi++) CellStateFlags[bi] = false;
         }
-        public override int who()
+        public override int GetCellType()
         { return 4; }
     }
 
