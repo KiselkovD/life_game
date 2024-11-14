@@ -24,7 +24,7 @@ namespace coursework_wpf
         public string[] CellColors = new string[6] { "#FFDC143C", "#FF560074", "#FFADD8E6", "#FF008000", "#FFA52A2A", "#FF36393F" };
         public int[] array = new int[1] { 1 };
         public int cell_type = 0;
-        public int input_type = 0;
+        public int input_type = 0; // вводить одну клетку или область
         public double speed = 0;
         public bool fl_pause = true, fl_menu = true;
         public int buff = 666;
@@ -32,8 +32,8 @@ namespace coursework_wpf
         public int sav_buf = 1;
         public int lod_buf = 1;
         DispatcherTimer gameloop;
-        Net net = new Net();
-        Net net_buf = new Net();
+        Net net = new Net(); // игровое поле
+        Net net_buf = new Net(); // игровое поле на следующим тике
         public MainWindow()
         {
             InitializeComponent();
@@ -59,9 +59,16 @@ namespace coursework_wpf
                 }
             }
             Console.WriteLine();
-            InitializeTimer();
+            speed = 0;
+            fl_menu = true;
+            menuWin.Visibility = Visibility.Visible; 
+            saveWin.Visibility = Visibility.Collapsed; 
+            loadWin.Visibility = Visibility.Collapsed; 
+            gameWin.Visibility = Visibility.Collapsed;
+            ruleWin.Visibility = Visibility.Collapsed;
+            InitializeTimer(); // запускаем игровой цикл
         }
-        private void InitializeTimer()
+        private void InitializeTimer() // таймер игрового цикла
         {
             var interval = TimeSpan.FromSeconds(0.1 + speed).Ticks;
             gameloop = new DispatcherTimer
@@ -82,31 +89,31 @@ namespace coursework_wpf
         }
         //coursework_wpf.MainWindow
         BrushConverter converter = new System.Windows.Media.BrushConverter();
-        private void Button_saves_Click(object sender, RoutedEventArgs e)//выводит из файла
+        private void Button_saves_Click(object sender, RoutedEventArgs e)// Обработчик события нажатия кнопки сохранения. Считывает данные из файла и обновляет буфер.
         {
             using (StreamReader sr = new StreamReader(File.Open($"{((Button)e.OriginalSource).Content}.txt", FileMode.OpenOrCreate)))
             {
-                for (int lol = 0; lol < 144; lol++)
+                for (int ll = 0; ll < 144; ll++)
                 {
                     switch (Convert.ToInt32(sr.ReadLine()))
                     {
                         case 0:
-                            net_buf.Cells[lol] = new killer();
+                            net_buf.Cells[ll] = new killer();
                             break;
                         case 1:
-                            net_buf.Cells[lol] = new usual();
+                            net_buf.Cells[ll] = new usual();
                             break;
                         case 2:
-                            net_buf.Cells[lol] = new social();
+                            net_buf.Cells[ll] = new social();
                             break;
                         case 3:
-                            net_buf.Cells[lol] = new helther();
+                            net_buf.Cells[ll] = new helther();
                             break;
                         case 4:
-                            net_buf.Cells[lol] = new food();
+                            net_buf.Cells[ll] = new food();
                             break;
                         case 5:
-                            net_buf.Cells[lol] = new Cell();
+                            net_buf.Cells[ll] = new Cell();
                             break;
                     }
                 }
@@ -115,7 +122,7 @@ namespace coursework_wpf
             sav_buf = Convert.ToInt32(((Button)e.OriginalSource).Content);
             //рисуем
         }
-        private void Button_save_this_Click(object sender, RoutedEventArgs e)//игровое поле в файл
+        private void Button_save_this_Click(object sender, RoutedEventArgs e)// Обработчик события нажатия кнопки для сохранения текущего игрового поля в файл
         {
             using (StreamWriter sr = new StreamWriter(File.Open($"{sav_buf}.txt", FileMode.Open)))
             {
@@ -125,7 +132,7 @@ namespace coursework_wpf
                 }
             }
         }
-        private void Button_loads_Click(object sender, RoutedEventArgs e)
+        private void Button_loads_Click(object sender, RoutedEventArgs e)// Обработчик события нажатия кнопки загрузки. Считывает данные из файла и обновляет буфер
         {
             using (StreamReader sr = new StreamReader(File.Open($"{((Button)e.OriginalSource).Content}.txt", FileMode.Open)))
             {
@@ -186,9 +193,9 @@ namespace coursework_wpf
                 }
             }
         }
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Button_Click(object sender, RoutedEventArgs e)// обработка ввода типов клеток в редакторе
         {
-            switch (input_type)
+            switch (input_type) // одиночный ввод и ввод областями
             {
                 case 0:
                     switch (cell_type)
