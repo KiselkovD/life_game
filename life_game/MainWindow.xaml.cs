@@ -126,9 +126,9 @@ namespace coursework_wpf
         {
             using (StreamWriter sr = new StreamWriter(File.Open($"{sav_buf}.txt", FileMode.Open)))
             {
-                for (int lol = 0; lol < 144; lol++)
+                for (int lll = 0; lll < 144; lll++)
                 {
-                    sr.WriteLine(net.Cells[lol].GetCellType());
+                    sr.WriteLine(net.Cells[lll].GetCellType());
                 }
             }
         }
@@ -136,27 +136,27 @@ namespace coursework_wpf
         {
             using (StreamReader sr = new StreamReader(File.Open($"{((Button)e.OriginalSource).Content}.txt", FileMode.Open)))
             {
-                for (int lol = 0; lol < 144; lol++)
+                for (int lll = 0; lll < 144; lll++)
                 {
                     switch (Convert.ToInt32(sr.ReadLine()))
                     {
                         case 0:
-                            net_buf.Cells[lol] = new killer();
+                            net_buf.Cells[lll] = new killer();
                             break;
                         case 1:
-                            net_buf.Cells[lol] = new usual();
+                            net_buf.Cells[lll] = new usual();
                             break;
                         case 2:
-                            net_buf.Cells[lol] = new social();
+                            net_buf.Cells[lll] = new social();
                             break;
                         case 3:
-                            net_buf.Cells[lol] = new helther();
+                            net_buf.Cells[lll] = new helther();
                             break;
                         case 4:
-                            net_buf.Cells[lol] = new food();
+                            net_buf.Cells[lll] = new food();
                             break;
                         case 5:
-                            net_buf.Cells[lol] = new Cell();
+                            net_buf.Cells[lll] = new Cell();
                             break;
                     }
                 }
@@ -168,27 +168,27 @@ namespace coursework_wpf
         }
         private void Button_load_this_Click(object sender, RoutedEventArgs e)//перекидывает игровое поле из файла
         {
-            for (int lol = 0; lol < 144; lol++)
+            for (int lll = 0; lll < 144; lll++)
             {
-                switch (net_buf.Cells[lol].GetCellType())
+                switch (net_buf.Cells[lll].GetCellType())
                 {
                     case 0:
-                        net.Cells[lol] = new killer();
+                        net.Cells[lll] = new killer();
                         break;
                     case 1:
-                        net.Cells[lol] = new usual();
+                        net.Cells[lll] = new usual();
                         break;
                     case 2:
-                        net.Cells[lol] = new social();
+                        net.Cells[lll] = new social();
                         break;
                     case 3:
-                        net.Cells[lol] = new helther();
+                        net.Cells[lll] = new helther();
                         break;
                     case 4:
-                        net.Cells[lol] = new food();
+                        net.Cells[lll] = new food();
                         break;
                     case 5:
-                        net.Cells[lol] = new Cell();
+                        net.Cells[lll] = new Cell();
                         break;
                 }
             }
@@ -231,37 +231,37 @@ namespace coursework_wpf
                     else
                     {
                         buff2 = Convert.ToInt32(((Button)e.OriginalSource).FontSize) - 1;
-                        int xxma;
-                        int xxmi;
-                        int yyma;
-                        int yymi;
+                        int x_max;
+                        int x_min;
+                        int y_max;
+                        int y_min;
                         int xx = buff % Const.MAX_GRID;
                         int yy = (buff - xx) / Const.MAX_GRID;
                         int xx2 = buff2 % Const.MAX_GRID;
                         int yy2 = (buff2 - xx2) / Const.MAX_GRID;
                         if (xx > xx2)
                         {
-                            xxma = xx;
-                            xxmi = xx2;
+                            x_max = xx;
+                            x_min = xx2;
                         }
                         else
                         {
-                            xxmi = xx;
-                            xxma = xx2;
+                            x_min = xx;
+                            x_max = xx2;
                         }
                         if (yy > yy2)
                         {
-                            yyma = yy;
-                            yymi = yy2;
+                            y_max = yy;
+                            y_min = yy2;
                         }
                         else
                         {
-                            yymi = yy;
-                            yyma = yy2;
+                            y_min = yy;
+                            y_max = yy2;
                         }
-                        for (int xg = xxmi; xg < xxma + 1; xg++)
+                        for (int xg = x_min; xg < x_max + 1; xg++)
                         {
-                            for (int yg = yymi; yg < yyma + 1; yg++)
+                            for (int yg = y_min; yg < y_max + 1; yg++)
                             {
                                 switch (cell_type)
                                 {
